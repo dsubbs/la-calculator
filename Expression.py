@@ -44,18 +44,29 @@ class Expression:
         if ('*' in var_cont):
             print("found a multiplication")
             vars = []
+
+            # Reverse string to search from the end
+            var_cont = var_cont[::-1].strip(    )
+
             while ('*' in var_cont):
                 vars.append(var_cont[:var_cont.find('*') - 1])
-                var_cont = var_cont[var_cont.find('*') + 1:]
+                var_cont = var_cont[var_cont.find('*') + 2:]
+                if not ('*' in var_cont):
+                    vars.append(var_cont)
+
+            # DEBUGGING
             print(vars)
+            # PRINTING VARS THAT ARE MULTIPLIED
+
             for elem in vars:
+                elem = elem[::-1]
                 if self.local_vars.get(elem) == None:
                     raise WrongExpression
                 else:
                     result = result * self.local_vars.get(elem)
 
         if (not '*' in self.expression) and (not '+' in self.expression):
-            result = int(var_cont)
+            result = float(var_cont)
 
         if ('=' in self.expression):
             print("creating new variable")
