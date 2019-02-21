@@ -4,6 +4,15 @@ class Expression:
         self.expression = expression.strip()
         self.local_vars = local_vars
 
+    def listToDo(operation, toList, fromList):
+        if (not operation == "*") or (not operation == "/") or (not operation == "+") or (not operation == "-"):
+            raise WrongExpression
+        while (operation in fromList):
+            toList.append(fromList[:fromList.find(operation) - 1])
+            var_cont = fromList[fromList.find(operation) + 2:]
+            if not (operation in fromList):
+                toList.append(fromList)
+
     def Render(self):
 
         # Quitting the application, throws 1 if "exit"
@@ -34,36 +43,32 @@ class Expression:
             print("var name can't be integer")
             raise WrongExpression
 
-        # Assume expression assigns integers
         var_cont = self.expression[self.expression.find('=') + 1:].strip()
 
         print("checking for operations")
 
         result = 1
 
-        if ('*' in var_cont):
-            print("found a multiplication")
-            vars = []
+        vars_sum = []
+        vars_minus = []
 
-            # Reverse string to search from the end
-            var_cont = var_cont[::-1].strip(    )
+        # Reverse string to search from the end
+        var_cont = var_cont[::-1].strip()
 
-            while ('*' in var_cont):
-                vars.append(var_cont[:var_cont.find('*') - 1])
-                var_cont = var_cont[var_cont.find('*') + 2:]
-                if not ('*' in var_cont):
-                    vars.append(var_cont)
 
-            # DEBUGGING
-            print(vars)
-            # PRINTING VARS THAT ARE MULTIPLIED
+        # THERE MUST BE A WAY
 
-            for elem in vars:
-                elem = elem[::-1]
-                if self.local_vars.get(elem) == None:
-                    raise WrongExpression
-                else:
-                    result = result * self.local_vars.get(elem)
+
+        # DEBUGGING
+        print(vars)
+        # PRINTING VARS THAT ARE MULTIPLIED
+
+        for elem in vars:
+            elem = elem[::-1]
+            if self.local_vars.get(elem) == None:
+                raise WrongExpression
+            else:
+                result = result + self.local_vars.get(elem)
 
         if (not '*' in self.expression) and (not '+' in self.expression):
             result = float(var_cont)
